@@ -1,5 +1,8 @@
 package org.fugerit.java.doc.base.kotlin.model
 
+import org.fugerit.java.core.xml.dom.DOMIO
+import java.io.StringWriter
+
 /*
  * Inspired by :
  * https://kotlinlang.org/docs/type-safe-builders.html#scope-control-dslmarker
@@ -8,12 +11,12 @@ package org.fugerit.java.doc.base.kotlin.model
 class HelperDSL {
 
     interface Element {
-        fun render(builder: StringBuilder, indent: String)
+        fun render(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {}
     }
 
     class TextElement(val text: String) : Element {
-        override fun render(builder: StringBuilder, indent: String) {
-            builder.append("$indent$text\n")
+        override fun render(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {
+            xmlParent.appendChild( xmlDocument.createTextNode( text ) )
         }
     }
 
@@ -31,27 +34,30 @@ class HelperDSL {
             return tag
         }
 
-        override fun render(builder: StringBuilder, indent: String) {
-            builder.append("$indent<$name${renderAttributes()}>\n")
-            for (c in children) {
-                c.render(builder, indent + "  ")
-            }
-            builder.append("$indent</$name>\n")
+        override fun render(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {
+            val xmlElement = xmlDocument.createElement( name )
+            xmlParent.appendChild( xmlElement )
+            helper(xmlElement, xmlDocument)
         }
 
-        private fun renderAttributes(): String {
-            val builder = StringBuilder()
-            for ((attr, value) in attributes) {
-                builder.append(" $attr=\"$value\"")
-            }
-            return builder.toString()
+        private fun helper(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {
+            attributes.forEach { a -> xmlParent.setAttribute( a.key, a.value ) }
+            children.forEach { e -> e.render(xmlParent, xmlDocument) }
+        }
+
+        fun att( name : String, value: String ) {
+            attributes.put( name, value )
         }
 
         override fun toString(): String {
-            val builder = StringBuilder()
-            render(builder, "")
-            return builder.toString()
+            val xmlDocument = DOMIO.newSafeDocumentBuilderFactory().newDocumentBuilder().newDocument();
+            val xmlRoot = xmlDocument.createElement(name)
+            helper(xmlRoot, xmlDocument)
+            val writer = StringWriter()
+            DOMIO.writeDOMIndent( xmlRoot, writer )
+            return writer.toString()
         }
+
     }
 
     abstract class TagWithText(name: String) : Tag(name) {
