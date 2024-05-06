@@ -16,7 +16,7 @@ class DocTest : TestCase() {
 
     val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
-    fun testBuild() {
+    private fun createDoc(): Doc {
         val doc = Doc(DocVersion.CURRENT_VERSION.stringVersion())
         doc.head {  }
         doc.body {
@@ -24,7 +24,14 @@ class DocTest : TestCase() {
             para { text("Second paragraph") }
             para { text("Third paragraph") }
         }
+        return doc
+    }
+
+    fun testBuild() {
+        val doc = createDoc()
         log.info( "print doc sample \n{}", doc.toString() )
+        // test result
+        Assertions.assertEquals( "http://javacoredoc.fugerit.org", doc.attributes.get( "xmlns" ) )
         // test rendering as html
         val handler = FreeMarkerHtmlTypeHandlerUTF8.HANDLER;
         val baos = ByteArrayOutputStream()
@@ -32,7 +39,6 @@ class DocTest : TestCase() {
         val output =  DocOutput.newOutput( baos )
         handler.handle( input, output )
         log.info( "print html output \n{}", baos.toString() )
-        Assertions.assertEquals( "http://javacoredoc.fugerit.org", doc.attributes.get( "xmlns" ) )
     }
 
 }
