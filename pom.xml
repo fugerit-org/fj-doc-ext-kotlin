@@ -24,6 +24,7 @@
 	
 	<properties>
 		<kotlin.version>1.9.23</kotlin.version>
+		<fj-doc-version>${parent.version}</fj-doc-version>
 	</properties>
 
 	<scm>
