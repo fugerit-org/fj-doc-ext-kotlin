@@ -119,6 +119,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-scripting-jsr223</artifactId>
+			<version>${kotlin.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.fugerit.java</groupId>
 			<artifactId>fj-doc-freemarker</artifactId>
 			<scope>test</scope>
