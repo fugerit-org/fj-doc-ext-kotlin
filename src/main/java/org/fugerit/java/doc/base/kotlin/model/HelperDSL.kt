@@ -11,7 +11,9 @@ import java.io.StringWriter
 class HelperDSL {
 
     interface Element {
-        fun render(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {}
+        fun render(xmlParent: org.w3c.dom.Element, xmlDocument: org.w3c.dom.Document) {
+            // default do-nothing implementation
+        }
     }
 
     class TextElement(val text: String) : Element {
