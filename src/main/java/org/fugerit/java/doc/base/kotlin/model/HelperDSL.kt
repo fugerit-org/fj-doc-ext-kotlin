@@ -48,8 +48,12 @@ class HelperDSL {
             children.forEach { e -> e.render(xmlParent, xmlDocument) }
         }
 
-        protected fun <T : Element> setAtt( tag : T, name : String, value: String ) : T {
-            att( name, value )
+        protected fun <T : Element, V> setAtt( tag : T, name : String, value: V, check: (v: V) -> Boolean = {_->true} ) : T {
+            if ( check( value ) ) {
+                att( name, value.toString() )
+            } else {
+                throw ConfigRuntimeException( "Check failed for attribute, name : '$name', value : '$value'" )
+            }
             return tag
         }
 
@@ -61,15 +65,38 @@ class HelperDSL {
             children.add( element )
         }
 
-        protected fun <T : Element> setSpace( tag : T, name : String, value: Int = 0 ) : T = setAtt( tag, name, value.toString() )
+        protected fun <T : Element> setId( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> v.length in 2..64 }
 
-        protected fun <T : Element> setColor( tag : T, name : String, value: String ) : T {
-            if ( value.matches( Regex( "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" ) ) ) {
-                return setAtt( tag, name, value )
-            } else {
-                throw ConfigRuntimeException( "Wrong format for color : '$name'! -> '$value'!" )
-            }
-        }
+        protected fun <T : Element> setFormat( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> v.length in 2..128 }
+
+        protected fun <T : Element> setSpace( tag : T, name : String, value: Int = 0 ) : T =
+            setAtt(tag, name, value) { v -> v in 0..2048 }
+
+        protected fun <T : Element> setLeading( tag : T, name : String, value: Int = 0 ) : T =
+            setAtt(tag, name, value) { v -> v in 0..2048 }
+
+        protected fun <T : Element> setTextIndent( tag : T, name : String, value: Int = 0 ) : T =
+            setAtt(tag, name, value) { v -> v in 0..2048 }
+
+        protected fun <T : Element> setFontSize( tag : T, name : String, value: Int = 0 ) : T =
+            setAtt(tag, name, value) { v -> v in 0..256 }
+
+        protected fun <T : Element> setColor( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> v.matches(Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")) }
+
+        protected fun <T : Element> setStyle( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> setOf( "normal", "bold", "underline", "italic", "bolditalic" ).contains( v ) }
+
+        protected fun <T : Element> setAlign( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> setOf( "center", "left", "right", "justify", "justifyall" ).contains( v ) }
+
+        protected fun <T : Element> setDataType( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> setOf( "string", "number", "date" ).contains( v ) }
+
+        protected fun <T : Element> setFontName( tag : T, name : String, value: String ) : T =
+            setAtt(tag, name, value) { v -> v.length in 2..64 }
 
         override fun toString(): String {
             val xmlDocument = DOMIO.newSafeDocumentBuilderFactory().newDocumentBuilder().newDocument();

@@ -24,9 +24,23 @@ class DocTest : TestCase() {
                 info( "doc-title", "DSL Kotlin Document From JUnit 1" )
             }
             body {
-                para { text("First paragraph") }
-                para { text("Second paragraph") }
-                para { text("Third paragraph") }
+                para( "Concise paragraph" )
+                    .align( "center" )
+                    .style( "bold" )
+                    .whiteSpaceCollapse( true )
+                    .spaceLeft( 10 )
+                    .leading( 1 )
+                    .format( "{}" )
+                para {
+                    text("Verbose paragraph")
+                    align( "left" )
+                    style( "italic" )
+                    whiteSpaceCollapse( true )
+                    spaceAfter( 10 )
+                    foreColor( "#000000" )
+                    backColor( "#ffffff" )
+                }
+                phrase( "Inline phrase" ).style( "normal" ).size( 8 )
             }
         }
     }

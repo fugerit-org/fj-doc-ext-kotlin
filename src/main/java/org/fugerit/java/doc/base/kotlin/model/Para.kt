@@ -6,27 +6,21 @@ class Para( text: String = "" ) : HelperDSL.TagWithText(DocPara.TAG_NAME) {
     init {
         text(text)
     }
-    fun para( text: String = "", init: Para.() -> Unit = {} ): Para {
-        return initTag(Para( text ), init);
-    }
-    fun phrase( text: String = "", init: Phrase.() -> Unit = {} ): Phrase {
-        return initTag(Phrase( text ), init);
-    }
     fun text( value: String ) { children.add( HelperDSL.TextElement( value ) ) }
-    fun id( value: String ): Para = setAtt( this,"id", value )
-    fun style( value: String ): Para = setAtt( this, "style", value )
-    fun align( value: String ): Para = setAtt( this,"align", value )
-    fun fontName( value: String ): Para = setAtt( this, "font-name", value )
-    fun leading( value: Double = 0.0 ): Para = setAtt( this,"leading", value.toString() )
-    fun backColor( value: String ): Para = setColor( this,"back-color", value )
-    fun foreColor( value: String ): Para = setColor( this,"fore-color", value )
-    fun type( value: String ): Para = setAtt( this,"type", value )
-    fun format( value: String ): Para = setAtt( this,"format", value )
-    fun size( value: Int = 10 ): Para = setAtt( this,"size", value.toString() )
-    fun textIndent( value: Int = 10 ): Para = setAtt( this,"textIndent", value.toString() )
-    fun spaceBefore( value: Int = 0 ): Para = setSpace( this,"space-before", value )
-    fun spaceAfter( value: Int = 0 ): Para = setSpace( this,"space-after", value )
-    fun spaceLeft( value: Int = 0 ): Para = setSpace( this,"space-left", value )
-    fun spaceRight( value: Int = 0 ): Para = setSpace( this,"space-right", value )
-    fun whiteSpaceCollapse( value: Boolean = false ): Para = setAtt( this,"white-space-collapse", value.toString() )
+    fun id( value: String ): Para = setId( this,ConstsAtts.ID, value )
+    fun style( value: String ): Para = setStyle( this, ConstsAtts.STYLE, value )
+    fun align( value: String ): Para = setAlign( this,ConstsAtts.ALIGN, value )
+    fun fontName( value: String ): Para = setFontName( this, ConstsAtts.FONT_NAME, value )
+    fun leading( value: Int = 0 ): Para = setLeading( this, ConstsAtts.LEADING, value )
+    fun backColor( value: String ): Para = setColor( this, ConstsAtts.BACK_COLOR, value )
+    fun foreColor( value: String ): Para = setColor( this, ConstsAtts.FORE_COLOR, value )
+    fun type( value: String ): Para = setDataType( this,ConstsAtts.TYPE, value )
+    fun format( value: String ): Para = setFormat( this,ConstsAtts.FORMAT, value )
+    fun size( value: Int = 10 ): Para = setFontSize( this,ConstsAtts.SIZE, value )
+    fun textIndent( value: Int = 10 ): Para = setTextIndent( this,ConstsAtts.TEXT_INDENT, value )
+    fun spaceBefore( value: Int = 0 ): Para = setSpace( this,ConstsAtts.SPACE_BEFORE, value )
+    fun spaceAfter( value: Int = 0 ): Para = setSpace( this,ConstsAtts.SPACE_AFTER, value )
+    fun spaceLeft( value: Int = 0 ): Para = setSpace( this,ConstsAtts.SPACE_LEFT, value )
+    fun spaceRight( value: Int = 0 ): Para = setSpace( this,ConstsAtts.SPACE_RIGHT, value )
+    fun whiteSpaceCollapse( value: Boolean = false ): Para = setAtt( this,ConstsAtts.WHITE_SPACE_COLLAPSE, value.toString() )
 }
