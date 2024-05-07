@@ -12,6 +12,3 @@ class Doc( version : String = DocVersion.CURRENT_VERSION.stringVersion() ) : Hel
     fun head(init: Meta.() -> Unit) = initTag(Meta(), init)
     fun body(init: Body.() -> Unit) = initTag(Body(), init)
 }
-
-fun docDsl(block: Doc.() -> Unit): Doc =
-    Doc().apply(block)

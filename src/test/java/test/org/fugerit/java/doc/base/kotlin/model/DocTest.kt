@@ -3,7 +3,6 @@ package test.org.fugerit.java.doc.base.kotlin.model
 import junit.framework.TestCase
 import org.fugerit.java.doc.base.config.DocInput
 import org.fugerit.java.doc.base.config.DocOutput
-import org.fugerit.java.doc.base.config.DocVersion
 import org.fugerit.java.doc.base.kotlin.model.Doc
 import org.fugerit.java.doc.base.kotlin.model.docDsl
 import org.fugerit.java.doc.freemarker.html.FreeMarkerHtmlTypeHandlerUTF8
@@ -14,15 +13,16 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.StringReader
 import javax.script.ScriptEngineManager
-import javax.swing.text.html.HTML
 
 class DocTest : TestCase() {
 
-    val log: Logger = LoggerFactory.getLogger(this.javaClass)
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
     private fun createDoc(): Doc {
         return docDsl {
-            head {  }
+            head {
+                info( "doc-title", "DSL Kotlin Document From JUnit 1" )
+            }
             body {
                 para { text("First paragraph") }
                 para { text("Second paragraph") }
