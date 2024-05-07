@@ -5,8 +5,12 @@ docDsl {
         info( "doc-title", "DSL Kotlin Document From Script 1" )
     }
     body {
-        para { text("First paragraph") }
-        para { text("Second paragraph") }
-        para { text("Third paragraph") }
+        para( "Concise paragraph" ) {}.align( "center" ).style( "bold" )
+        para {
+            text("Verbose paragraph")
+            align( "left" )
+            style( "italic" )
+        }
+        para( "Inline paragraph" ).align( "right" ).style( "normal" )
     }
 }

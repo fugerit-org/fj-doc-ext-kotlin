@@ -49,6 +49,7 @@ class HelperDSL {
 
         fun att( name : String, value: String ) {
             attributes.put( name, value )
+            return Unit
         }
 
         override fun toString(): String {
@@ -69,7 +70,11 @@ class HelperDSL {
     }
 
     abstract class BodyTag(name: String) : TagWithText(name) {
-        fun para(init: Para.() -> Unit) = initTag(Para(), init)
+        fun para( text: String = "", init: Para.() -> Unit = {} ): Para {
+            val para = initTag(Para(), init);
+            para.text( text )
+            return para;
+        }
     }
 
 }
