@@ -4,7 +4,7 @@ import junit.framework.TestCase
 import org.fugerit.java.doc.base.config.DocInput
 import org.fugerit.java.doc.base.config.DocOutput
 import org.fugerit.java.doc.base.kotlin.model.Doc
-import org.fugerit.java.doc.base.kotlin.model.docDsl
+import org.fugerit.java.doc.base.kotlin.model.doc
 import org.fugerit.java.doc.freemarker.html.FreeMarkerHtmlTypeHandlerUTF8
 import org.junit.jupiter.api.Assertions
 import org.slf4j.Logger
@@ -19,7 +19,7 @@ class DocTest : TestCase() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
     private fun createDoc(): Doc {
-        return docDsl {
+        return doc {
             head {
                 info( "doc-title", "DSL Kotlin Document From JUnit 1" )
             }
