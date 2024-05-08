@@ -24,6 +24,7 @@ doc {
             spaceAfter( 10 )
             foreColor( "#000000" )
             backColor( "#ffffff" )
+            type( "date" )
         }
         phrase( "Inline phrase 1" ).style( "normal" ).size( 8 )
             .fontName( "Arial" ).anchor( "a")
