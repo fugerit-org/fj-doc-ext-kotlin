@@ -1,3 +1,4 @@
+package org.fugerit.java.doc.base.kotlin.dsl
 import org.fugerit.java.core.cfg.ConfigRuntimeException
 import org.fugerit.java.core.xml.dom.DOMIO
 import java.io.StringWriter
@@ -78,6 +79,6 @@ class HelperDSL {
         }
     }
 
-    EXTRA-FUN
+    
 
 }

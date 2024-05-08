@@ -23,7 +23,9 @@ class GenerateKotlinTest {
     @Test
     void testGeneration() {
         SafeFunction.apply( () -> {
-            GenerateKotlinConfig config = new GenerateKotlinConfig(PropsIO.loadFromClassLoader( "generate-kotlin/config.properties" ), parseLast());
+            GenerateKotlinConfig config = new GenerateKotlinConfig(
+                    PropsIO.loadFromClassLoader( "generate-kotlin/config.properties" ),
+                    parseLast());
             GenerateKotlinFacade.generate( config );
         } );
     }
