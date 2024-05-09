@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>fj-doc-ext-kotlin</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.fugerit.java</groupId>
@@ -24,7 +24,7 @@
 	
 	<properties>
 		<kotlin.version>1.9.23</kotlin.version>
-		<fj-doc-version>${parent.version}</fj-doc-version>
+		<fj-doc-version>${project.parent.version}</fj-doc-version>
 	</properties>
 
 	<scm>
