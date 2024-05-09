@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kotlin DSL code generation
 - DSL based package org.fugerit.java.doc.base.kotlin.dsl
 
+### Removed
+
+- POC based package org.fugerit.java.doc.base.kotlin.model
+
 ## [0.1.0] - 2024-05-07
 
 ### Added
