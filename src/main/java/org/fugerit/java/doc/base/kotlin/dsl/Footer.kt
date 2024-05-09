@@ -14,9 +14,9 @@ class Footer : HelperDSL.TagWithText( "footer" ) {
        return initTag(H(text), init);
    }
 
-   fun align( value: String ): Footer = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
+   fun align( value: String ): Footer = alignType( this, "align", value )
    fun numbered( value: Boolean ): Footer = setAtt( this, "numbered", value )
-   fun borderWidth( value: Int ): Footer = setAtt( this, "border-width", value ) { v -> v in 0..32 }
+   fun borderWidth( value: Int ): Footer = borderWidthType( this, "border-width", value )
    fun expectedSize( value: Int ): Footer = setAtt( this, "expected-size", value )
 
 }

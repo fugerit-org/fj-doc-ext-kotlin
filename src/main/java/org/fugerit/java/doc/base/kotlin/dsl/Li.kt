@@ -14,6 +14,6 @@ class Li : HelperDSL.TagWithText( "li" ) {
        return initTag(Pl(), init);
    }
 
-   fun id( value: String ): Li = setAtt( this, "id", value ) { v -> v.length in 1..64 }
+   fun id( value: String ): Li = idType( this, "id", value )
 
 }

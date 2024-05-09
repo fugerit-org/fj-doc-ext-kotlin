@@ -7,6 +7,6 @@ class Bookmark( text: String = "" ) : HelperDSL.TagWithText( "bookmark" ) {
    fun setText( value: String ) { addKid( HelperDSL.TextElement( value ) ) }
 
 
-   fun ref( value: String ): Bookmark = setAtt( this, "ref", value ) { v -> v.length in 1..64 }
+   fun ref( value: String ): Bookmark = idType( this, "ref", value )
 
 }

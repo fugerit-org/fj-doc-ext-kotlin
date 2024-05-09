@@ -5,7 +5,7 @@ class List : HelperDSL.TagWithText( "list" ) {
        return initTag(Li(), init);
    }
 
-   fun id( value: String ): List = setAtt( this, "id", value ) { v -> v.length in 1..64 }
-   fun listType( value: String ): List = setAtt( this, "list-type", value ) { v -> setOf( "ul", "uld", "ulm", "ol", "oln", "oll" ).contains( v ) }
+   fun id( value: String ): List = idType( this, "id", value )
+   fun listType( value: String ): List = listType( this, "list-type", value )
 
 }

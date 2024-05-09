@@ -62,6 +62,34 @@ class HelperDSL {
             children.add( element )
         }
 
+		protected fun <T : Element> alignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
+		protected fun <T : Element> borderWidthType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..32 }
+		protected fun <T : Element> idType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..64 }
+		protected fun <T : Element> styleType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "normal", "bold", "underline", "italic", "bolditalic" ).contains( v ) }
+		protected fun <T : Element> fontNameType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..64 }
+		protected fun <T : Element> leadingType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
+		protected fun <T : Element> colorType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+		protected fun <T : Element> dataType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "string", "number", "date" ).contains( v ) }
+		protected fun <T : Element> formatType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..128 }
+		protected fun <T : Element> fontSizeType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..256 }
+		protected fun <T : Element> textIndentType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
+		protected fun <T : Element> spaceType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
+		protected fun <T : Element> whiteSpaceCollapsType( tag : T, name : String, v: Boolean) : T = setAtt( tag, name, v ) 
+		protected fun <T : Element> columnsType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..2048 }
+		protected fun <T : Element> percentageType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..100 }
+		protected fun <T : Element> tableRenderModeType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "normal", "inline" ).contains( v ) }
+		protected fun <T : Element> spanType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
+		protected fun <T : Element> valignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "middle", "top", "bottom" ).contains( v ) }
+		protected fun <T : Element> listType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "ul", "uld", "ulm", "ol", "oln", "oll" ).contains( v ) }
+		protected fun <T : Element> urlType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 0..2048 }
+		protected fun <T : Element> imageType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "png", "jpg", "gif" ).contains( v ) }
+		protected fun <T : Element> scalingType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
+		protected fun <T : Element> base64Type( tag : T, name : String, v: String) : T = setAtt( tag, name, v ) 
+		protected fun <T : Element> altType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 0..2048 }
+		protected fun <T : Element> lengthType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
+		protected fun <T : Element> headLevelType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..7 }
+
+
         override fun toString(): String {
             val xmlDocument = DOMIO.newSafeDocumentBuilderFactory().newDocumentBuilder().newDocument();
             val xmlRoot = xmlDocument.createElement(name)
@@ -78,7 +106,5 @@ class HelperDSL {
             children.add(TextElement(this))
         }
     }
-
-    
 
 }
