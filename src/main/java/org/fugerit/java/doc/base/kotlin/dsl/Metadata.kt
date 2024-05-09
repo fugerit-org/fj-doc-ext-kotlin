@@ -10,16 +10,16 @@ class Metadata : HelperDSL.TagWithText( "metadata" ) {
    fun footer( init: Footer.() -> Unit = {} ): Footer {
        return initTag(Footer(), init);
    }
-   fun header_ext( init: HeaderExt.() -> Unit = {} ): HeaderExt {
+   fun headerExt( init: HeaderExt.() -> Unit = {} ): HeaderExt {
        return initTag(HeaderExt(), init);
    }
-   fun footer_ext( init: FooterExt.() -> Unit = {} ): FooterExt {
+   fun footerExt( init: FooterExt.() -> Unit = {} ): FooterExt {
        return initTag(FooterExt(), init);
    }
    fun background( init: Background.() -> Unit = {} ): Background {
        return initTag(Background(), init);
    }
-   fun bookmark_tree( init: BookmarkTree.() -> Unit = {} ): BookmarkTree {
+   fun bookmarkTree( init: BookmarkTree.() -> Unit = {} ): BookmarkTree {
        return initTag(BookmarkTree(), init);
    }
 

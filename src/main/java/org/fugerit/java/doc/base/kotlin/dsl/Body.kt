@@ -28,7 +28,7 @@ class Body : HelperDSL.TagWithText( "body" ) {
    fun h( text: String = "", init: H.() -> Unit = {} ): H {
        return initTag(H(text), init);
    }
-   fun page_break( init: PageBreak.() -> Unit = {} ): PageBreak {
+   fun pageBreak( init: PageBreak.() -> Unit = {} ): PageBreak {
        return initTag(PageBreak(), init);
    }
 

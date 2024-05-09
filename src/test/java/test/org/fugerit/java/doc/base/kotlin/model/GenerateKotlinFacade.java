@@ -67,7 +67,7 @@ public class GenerateKotlinFacade {
         elements.forEach( e -> {
             boolean isTextElementSub = isTextElement( e.getXsdComplexType() );
             String kotlinClass = config.toKotlinClass( e.getRawName() );
-            String kotlinFun = config.toKotlinFun( e.getName() );
+            String kotlinFun = config.toKotlinFun( e.getRawName() );
             String textConstructor = isTextElementSub ? " text: String = \"\"," : "";
             builder.append( "   fun "+kotlinFun+"("+textConstructor+" init: "+kotlinClass+".() -> Unit = {} ): "+kotlinClass+" {\n" );
             builder.append( "       return initTag("+kotlinClass+"(" +(isTextElementSub ? "text" : "")+ "), init);\n" );
@@ -89,8 +89,6 @@ public class GenerateKotlinFacade {
             if ( choice.getAutodocSequence() != null ) choice.getAutodocSequence().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
             if ( choice.getAutodocSequence() != null ) choice.getAutodocChoices().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
         }
-
-
     }
 
     private static String handleElementFun( GenerateKotlinConfig config, AutodocElement element, boolean isTextElement ) {
