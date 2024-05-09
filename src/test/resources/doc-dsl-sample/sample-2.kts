@@ -3,6 +3,18 @@ import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 dslDoc {
     meta {
         info( ( "DSL Kotlin Document From JUnit 2" ) ).name( "doc-title" )
+        header {
+            align( "center" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+        }
+        footer() {
+            align( "right" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+        }
     }
     body {
         para( "Concise paragraph" )
@@ -26,7 +38,7 @@ dslDoc {
             row {
                 cell { para( "col 1" )  }
                 cell { para( "col 2" )  }
-            }.header( "true" )
+            }.header( true )
             row {
                 cell { para( "data 1" )  }
                 cell { para( "data 2" )  }
