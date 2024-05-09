@@ -21,8 +21,8 @@ class FooterExt : HelperDSL.TagWithText( "footer-ext" ) {
    }
 
    fun align( value: String ): FooterExt = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
-   fun numbered( value: String ): FooterExt = setAtt( this, "numbered", value )
+   fun numbered( value: Boolean ): FooterExt = setAtt( this, "numbered", value )
    fun borderWidth( value: Int ): FooterExt = setAtt( this, "border-width", value ) { v -> v in 0..32 }
-   fun expectedSize( value: String ): FooterExt = setAtt( this, "expected-size", value )
+   fun expectedSize( value: Int ): FooterExt = setAtt( this, "expected-size", value )
 
 }

@@ -21,8 +21,8 @@ class HeaderExt : HelperDSL.TagWithText( "header-ext" ) {
    }
 
    fun align( value: String ): HeaderExt = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
-   fun numbered( value: String ): HeaderExt = setAtt( this, "numbered", value )
+   fun numbered( value: Boolean ): HeaderExt = setAtt( this, "numbered", value )
    fun borderWidth( value: Int ): HeaderExt = setAtt( this, "border-width", value ) { v -> v in 0..32 }
-   fun expectedSize( value: String ): HeaderExt = setAtt( this, "expected-size", value )
+   fun expectedSize( value: Int ): HeaderExt = setAtt( this, "expected-size", value )
 
 }

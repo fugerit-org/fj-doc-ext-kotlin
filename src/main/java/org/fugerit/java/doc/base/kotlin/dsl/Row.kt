@@ -6,6 +6,6 @@ class Row : HelperDSL.TagWithText( "row" ) {
    }
 
    fun id( value: String ): Row = setAtt( this, "id", value ) { v -> v.length in 1..64 }
-   fun header( value: String ): Row = setAtt( this, "header", value )
+   fun header( value: Boolean ): Row = setAtt( this, "header", value )
 
 }

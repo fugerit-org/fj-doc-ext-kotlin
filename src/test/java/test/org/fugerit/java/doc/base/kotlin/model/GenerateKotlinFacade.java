@@ -111,15 +111,18 @@ public class GenerateKotlinFacade {
             String kotlinkFun = config.toKotlinFun( a.getRawName() );
             String typeFun = "String";
             String checkFun = "";
+            String baseName = a.getType();
             if ( a.getXsdSimpleType() != null ) {
-                String baseName = AutodocUtils.getBaseName( a.getXsdSimpleType().getAllRestrictions(), config.getAutodocModel() );
-                log.info( "type name : {}, basename : {}", a.getXsdSimpleType().getRawName(), baseName );
-                // type
-                if ( baseName.contains( "int" ) || baseName.contains( "decimal" ) ) {
-                    typeFun = "Int";
-                } else if ( baseName.contains( "boolean" ) ) {
-                    typeFun = "Boolean";
-                }
+                baseName = AutodocUtils.getBaseName( a.getXsdSimpleType().getAllRestrictions(), config.getAutodocModel() );
+            }
+            log.info( "type name : {}, basename : {}", a.getRawName(), baseName );
+            // type
+            if ( baseName.contains( "int" ) || baseName.contains( "decimal" ) ) {
+                typeFun = "Int";
+            } else if ( baseName.contains( "boolean" ) ) {
+                typeFun = "Boolean";
+            }
+            if ( a.getXsdSimpleType() != null ) {
                 // check
                 checkFun = createCheck( typeFun, a.getXsdSimpleType() );
             }

@@ -3,6 +3,18 @@ import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 dslDoc {
     meta {
         info( ( "DSL Kotlin Document From JUnit 2 with coverage" ) ).name( "doc-title" )
+        header {
+            align( "center" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+        }
+        footer() {
+            align( "right" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+        }
     }
     body {
         h( "head level 1" ).headLevel( 1 ).align( "center" )
@@ -30,7 +42,7 @@ dslDoc {
                 cell { para( "col 1" )  }
                 cell { para( "col 2" )  }
                 cell { para( "col 3" )  }
-            }.header( "true" ).id( "headerRow" )
+            }.header( true ).id( "headerRow" )
             row {
                 cell { para( "data 1" )  }.borderColorBottom( "#000000" ).borderColorLeft( "#000000" ).borderColorRight( "#000000" ).borderColorTop( "#ffffff" )
                 cell { para( "data 2 and 3" ).style( "italic" )  }.colspan( 2 ).rowspan( 1 ).align( "center" )

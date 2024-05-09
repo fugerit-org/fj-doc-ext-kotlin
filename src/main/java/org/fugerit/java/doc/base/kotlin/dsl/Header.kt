@@ -15,8 +15,8 @@ class Header : HelperDSL.TagWithText( "header" ) {
    }
 
    fun align( value: String ): Header = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
-   fun numbered( value: String ): Header = setAtt( this, "numbered", value )
+   fun numbered( value: Boolean ): Header = setAtt( this, "numbered", value )
    fun borderWidth( value: Int ): Header = setAtt( this, "border-width", value ) { v -> v in 0..32 }
-   fun expectedSize( value: String ): Header = setAtt( this, "expected-size", value )
+   fun expectedSize( value: Int ): Header = setAtt( this, "expected-size", value )
 
 }

@@ -31,7 +31,7 @@ class Cell : HelperDSL.TagWithText( "cell" ) {
    fun rowspan( value: Int ): Cell = setAtt( this, "rowspan", value )
    fun align( value: String ): Cell = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
    fun valign( value: String ): Cell = setAtt( this, "valign", value ) { v -> setOf( "middle", "top", "bottom" ).contains( v ) }
-   fun header( value: String ): Cell = setAtt( this, "header", value )
+   fun header( value: Boolean ): Cell = setAtt( this, "header", value )
    fun borderColor( value: String ): Cell = setAtt( this, "border-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
    fun borderColorTop( value: String ): Cell = setAtt( this, "border-color-top", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
    fun borderColorBottom( value: String ): Cell = setAtt( this, "border-color-bottom", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
