@@ -37,7 +37,7 @@ public class GenerateKotlinFacade {
         FileIO.writeString( content, dslFile );
     }
 
-    private static String createCheck( String typeFun, XsdSimpleType simpleType ) {
+    private static String createCheck( GenerateKotlinConfig config, String typeFun, XsdSimpleType simpleType ) {
         String checkFun = "";
         SimpleValue<Integer> min = new SimpleValue<>(-1);
         SimpleValue<Integer> max = new SimpleValue<>(-1);
@@ -108,6 +108,8 @@ public class GenerateKotlinFacade {
         // functions for attributes
         String kotlinClassElement = config.toKotlinClass( element.getName() );
         element.getXsdAttributes().forEach( a -> {
+            String xmlType = a.getType();
+            String checkFunName = config.toCheckTypeFun( xmlType );
             String kotlinkFun = config.toKotlinFun( a.getRawName() );
             String typeFun = "String";
             String checkFun = "";
@@ -124,10 +126,16 @@ public class GenerateKotlinFacade {
             }
             if ( a.getXsdSimpleType() != null ) {
                 // check
-                checkFun = createCheck( typeFun, a.getXsdSimpleType() );
+                checkFun = createCheck( config, typeFun, a.getXsdSimpleType() );
             }
-            log.info( "element : {}, attribute : {}, type : {}", element.getName(), a.getRawName(), typeFun );
-            builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = setAtt( this, \""+a.getRawName()+"\", value )"+checkFun+"\n" );
+            log.info( "element : {}, attribute : {}, type : {} : xml type : {}, checkFunName : {}", element.getName(), a.getRawName(), typeFun, xmlType, checkFunName );
+            if ( xmlType.contains( config.getAutodocModel().getAutodocPrefix() ) )  {
+                String extraFun = "protected fun <T : Element> "+checkFunName+"Type( tag : T, name : String, v: "+typeFun+") : T = setAtt( tag, name, v ) "+checkFun;
+                config.getExtraFun().add( extraFun );
+                builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = "+checkFunName+"Type( this, \""+a.getRawName()+"\", value )\n" );
+            } else {
+                builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = setAtt( this, \""+a.getRawName()+"\", value )"+checkFun+"\n" );
+            }
         } );
         return builder.toString();
     }
@@ -162,13 +170,14 @@ public class GenerateKotlinFacade {
     }
 
     public static void generate( GenerateKotlinConfig config ) {
-        StringBuilder extraFun = new StringBuilder();
+        final StringBuilder extraFun = new StringBuilder();
         if ( !config.getPackageFolder().exists() ) {
             config.getPackageFolder().mkdirs();
         }
         config.getAutodocModel().getElements().forEach( e ->  handleElement( config, e ) );
         SafeFunction.apply( () -> {
             try (InputStream is = ClassHelper.loadFromDefaultClassLoader( "generate-kotlin/helper-dsl.txt" )) {
+                config.getExtraFun().forEach( f -> extraFun.append( "\t\t"+f+"\n" ) );
                 String helperDslContent = "package "+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+"\n"
                         + StreamIO.readString( is ).replaceAll( "EXTRA-FUN", extraFun.toString() );
                 File helperFile = new File( config.getPackageFolder(), "HelperDSL.kt" );

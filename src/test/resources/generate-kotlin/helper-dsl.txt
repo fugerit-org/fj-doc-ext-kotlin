@@ -61,6 +61,8 @@ class HelperDSL {
             children.add( element )
         }
 
+EXTRA-FUN
+
         override fun toString(): String {
             val xmlDocument = DOMIO.newSafeDocumentBuilderFactory().newDocumentBuilder().newDocument();
             val xmlRoot = xmlDocument.createElement(name)
@@ -77,7 +79,5 @@ class HelperDSL {
             children.add(TextElement(this))
         }
     }
-
-    EXTRA-FUN
 
 }

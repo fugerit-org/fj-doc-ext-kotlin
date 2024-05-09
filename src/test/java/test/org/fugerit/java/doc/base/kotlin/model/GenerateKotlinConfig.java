@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.fugerit.java.doc.lib.autodoc.parser.model.AutodocModel;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,6 +27,9 @@ public class GenerateKotlinConfig {
 
     @NonNull @Getter
     private AutodocModel autodocModel;
+
+    @Getter
+    private Set<String> extraFun = new LinkedHashSet<>();
 
     public String getProperty(String key) {
         return config.getProperty(key);
@@ -51,6 +53,18 @@ public class GenerateKotlinConfig {
     public String toKotlinFun( String tagName ) {
         String s = this.toKotlinClass( tagName );
         return s.substring( 0, 1 ).toLowerCase()+s.substring( 1 );
+    }
+
+    public String toCheckTypeFun( String typeName ) {
+        if ( typeName.toLowerCase().endsWith( "type" ) ) {
+            typeName = typeName.substring( 0, typeName.length()-4 );
+        }
+        String[] split = typeName.split( ":" );
+        if ( split.length > 1 ) {
+            return toKotlinFun( split[1] );
+        } else {
+            return toKotlinFun( split[0] );
+        }
     }
 
 }
