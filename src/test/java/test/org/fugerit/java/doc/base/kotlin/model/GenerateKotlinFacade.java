@@ -42,6 +42,7 @@ public class GenerateKotlinFacade {
         SimpleValue<Integer> min = new SimpleValue<>(-1);
         SimpleValue<Integer> max = new SimpleValue<>(-1);
         List<String> valueEnum = new ArrayList<>();
+        SimpleValue<String> regex = new SimpleValue( null );
         simpleType.getAllRestrictions().forEach( r -> {
             if ( r.getMinLength() != null ) min.setValue( r.getMinLength().getValue() );
             if ( r.getMaxLength() != null ) max.setValue( r.getMaxLength().getValue() );
@@ -50,8 +51,11 @@ public class GenerateKotlinFacade {
             if ( r.getMaxExclusive() != null ) max.setValue( Integer.valueOf( r.getMaxExclusive().getValue() )-1 );
             if ( r.getMaxInclusive() != null ) max.setValue( Integer.valueOf( r.getMaxInclusive().getValue() ) );
             if ( r.getEnumeration() != null ) r.getEnumeration().forEach( e -> valueEnum.add( "\""+e.getValue().toString()+"\"" ) );
+            if ( r.getPattern() != null && r.getPattern().getValue() != null ) regex.setValue( r.getPattern().getValue() );
         } );
-        if ( min.getValue() != -1 && max.getValue() != -1 ) {
+        if ( regex.getValue() != null ) {
+            checkFun = " { v -> v.matches(Regex(\""+regex.getValue()+"\")) }";
+        } else if ( min.getValue() != -1 && max.getValue() != -1 ) {
             if ( typeFun.equals( "String" ) ) {
                 checkFun = " { v -> v.length in "+min.getValue()+".."+max.getValue()+" }";
             } else if ( typeFun.equals( "Int" ) ) {

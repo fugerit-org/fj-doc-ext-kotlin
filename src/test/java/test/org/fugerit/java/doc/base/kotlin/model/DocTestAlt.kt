@@ -6,7 +6,6 @@ import org.fugerit.java.doc.base.config.DocInput
 import org.fugerit.java.doc.base.config.DocOutput
 import org.fugerit.java.doc.base.kotlin.dsl.Doc
 import org.fugerit.java.doc.base.kotlin.dsl.Para
-import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 import org.fugerit.java.doc.freemarker.html.FreeMarkerHtmlTypeHandlerUTF8
 import org.junit.jupiter.api.Assertions
 import org.slf4j.Logger
@@ -30,27 +29,37 @@ class DocTestAlt : TestCase() {
 
     private val longString = createString()
 
-    fun testScript() {
-        val fileContent = File("src/test/resources/doc-dsl-sample/sample-2.kts").readText()
+    private fun testScriptWorker( path : String, render : Boolean = true ) : Doc {
+        log.info( "path : {}, render : {}", path, render)
+        val fileContent = File(path ).readText()
         val scriptEngine = ScriptEngineManager().getEngineByExtension("kts")
         val parsedDsl = scriptEngine.eval(fileContent)
         if (parsedDsl !is org.fugerit.java.doc.base.kotlin.dsl.Doc) {
-            throw Exception("Script does not return a Doc")
+            throw ConfigRuntimeException("Script does not return a Doc")
         } else {
-            Assertions.assertEquals( "http://javacoredoc.fugerit.org", parsedDsl.attributes.get( "xmlns" ) )
             log.info( "print doc dsl script \n{}", parsedDsl )
-            // test rendering as html
-            renderHtml( parsedDsl )
+            if ( render ) renderHtml( parsedDsl )
         }
+        return parsedDsl;
     }
+
+    fun testScriptCoverage() =
+        Assertions.assertEquals( "http://javacoredoc.fugerit.org",
+            testScriptWorker( "src/test/resources/doc-dsl-sample/sample-2-coverage.kts" ).attributes["xmlns"]
+        )
+
+    fun testScript() =
+        Assertions.assertEquals( "http://javacoredoc.fugerit.org",
+            testScriptWorker( "src/test/resources/doc-dsl-sample/sample-2.kts" ).attributes["xmlns"]
+        )
 
     private fun renderHtml( doc: Doc ) {
         val handler = FreeMarkerHtmlTypeHandlerUTF8.HANDLER;
-        val baos = ByteArrayOutputStream()
+        val buffer = ByteArrayOutputStream()
         val input =  DocInput.newInput( handler.type, StringReader( doc.toString() ) )
-        val output =  DocOutput.newOutput( baos )
+        val output =  DocOutput.newOutput( buffer )
         handler.handle( input, output )
-        log.info( "print html output \n{}", baos.toString() )
+        log.info( "print html output \n{}", buffer.toString() )
     }
 
     fun testFail() {
@@ -61,6 +70,8 @@ class DocTestAlt : TestCase() {
         Assertions.assertThrows<ConfigRuntimeException>( ConfigRuntimeException::class.java) { testPara.spaceBefore( Int.MAX_VALUE ) }
         Assertions.assertThrows<ConfigRuntimeException>( ConfigRuntimeException::class.java) { testPara.spaceAfter( Int.MAX_VALUE ) }
         Assertions.assertThrows<ConfigRuntimeException>( ConfigRuntimeException::class.java) { testPara.leading( Int.MAX_VALUE ) }
+        Assertions.assertThrows<ConfigRuntimeException>( ConfigRuntimeException::class.java) { testPara.backColor( "#a" ) }
+        Assertions.assertThrows<ConfigRuntimeException>( ConfigRuntimeException::class.java) { testPara.foreColor( "#b" ) }
     }
 
 }

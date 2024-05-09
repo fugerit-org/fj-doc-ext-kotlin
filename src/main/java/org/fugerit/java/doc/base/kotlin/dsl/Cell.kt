@@ -32,18 +32,18 @@ class Cell : HelperDSL.TagWithText( "cell" ) {
    fun align( value: String ): Cell = setAtt( this, "align", value ) { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
    fun valign( value: String ): Cell = setAtt( this, "valign", value ) { v -> setOf( "middle", "top", "bottom" ).contains( v ) }
    fun header( value: String ): Cell = setAtt( this, "header", value )
-   fun borderColor( value: String ): Cell = setAtt( this, "border-color", value )
-   fun borderColorTop( value: String ): Cell = setAtt( this, "border-color-top", value )
-   fun borderColorBottom( value: String ): Cell = setAtt( this, "border-color-bottom", value )
-   fun borderColorLeft( value: String ): Cell = setAtt( this, "border-color-left", value )
-   fun borderColorRight( value: String ): Cell = setAtt( this, "border-color-right", value )
+   fun borderColor( value: String ): Cell = setAtt( this, "border-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun borderColorTop( value: String ): Cell = setAtt( this, "border-color-top", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun borderColorBottom( value: String ): Cell = setAtt( this, "border-color-bottom", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun borderColorLeft( value: String ): Cell = setAtt( this, "border-color-left", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun borderColorRight( value: String ): Cell = setAtt( this, "border-color-right", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
    fun borderWidth( value: Int ): Cell = setAtt( this, "border-width", value ) { v -> v in 0..32 }
    fun borderWidthTop( value: Int ): Cell = setAtt( this, "border-width-top", value ) { v -> v in 0..32 }
    fun borderWidthBottom( value: Int ): Cell = setAtt( this, "border-width-bottom", value ) { v -> v in 0..32 }
    fun borderWidthLeft( value: Int ): Cell = setAtt( this, "border-width-left", value ) { v -> v in 0..32 }
    fun borderWidthRight( value: Int ): Cell = setAtt( this, "border-width-right", value ) { v -> v in 0..32 }
-   fun backColor( value: String ): Cell = setAtt( this, "back-color", value )
-   fun foreColor( value: String ): Cell = setAtt( this, "fore-color", value )
+   fun backColor( value: String ): Cell = setAtt( this, "back-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun foreColor( value: String ): Cell = setAtt( this, "fore-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
    fun type( value: String ): Cell = setAtt( this, "type", value ) { v -> setOf( "string", "number", "date" ).contains( v ) }
 
 }

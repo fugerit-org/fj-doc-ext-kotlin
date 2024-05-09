@@ -8,8 +8,8 @@ class Table : HelperDSL.TagWithText( "table" ) {
    fun id( value: String ): Table = setAtt( this, "id", value ) { v -> v.length in 1..64 }
    fun columns( value: Int ): Table = setAtt( this, "columns", value ) { v -> v in 1..2048 }
    fun width( value: Int ): Table = setAtt( this, "width", value ) { v -> v in 1..100 }
-   fun backColor( value: String ): Table = setAtt( this, "back-color", value )
-   fun foreColor( value: String ): Table = setAtt( this, "fore-color", value )
+   fun backColor( value: String ): Table = setAtt( this, "back-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+   fun foreColor( value: String ): Table = setAtt( this, "fore-color", value ) { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
    fun spacing( value: Int ): Table = setAtt( this, "spacing", value ) { v -> v in 0..2048 }
    fun padding( value: Int ): Table = setAtt( this, "padding", value ) { v -> v in 0..2048 }
    fun colwidths( value: String ): Table = setAtt( this, "colwidths", value )
