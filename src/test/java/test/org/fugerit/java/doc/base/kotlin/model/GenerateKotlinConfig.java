@@ -31,6 +31,9 @@ public class GenerateKotlinConfig {
     @Getter
     private Set<String> extraFun = new LinkedHashSet<>();
 
+    @Getter
+    private List<String> checkFun = new ArrayList<>();
+
     public String getProperty(String key) {
         return config.getProperty(key);
     }

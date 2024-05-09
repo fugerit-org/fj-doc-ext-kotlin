@@ -130,7 +130,16 @@ public class GenerateKotlinFacade {
             }
             log.info( "element : {}, attribute : {}, type : {} : xml type : {}, checkFunName : {}", element.getName(), a.getRawName(), typeFun, xmlType, checkFunName );
             if ( xmlType.contains( config.getAutodocModel().getAutodocPrefix() ) )  {
-                String extraFun = "protected fun <T : Element> "+checkFunName+"Type( tag : T, name : String, v: "+typeFun+") : T = setAtt( tag, name, v ) "+checkFun;
+                String checkFunRef = "";
+                if ( StringUtils.isNotEmpty( checkFun ) ) {
+                    String fullCheckFun = "(v: "+typeFun+") -> Boolean = "+checkFun;
+                    if ( !config.getCheckFun().contains( fullCheckFun ) ) {
+                        config.getCheckFun().add( fullCheckFun );
+                    }
+                    int index = config.getCheckFun().indexOf( fullCheckFun );
+                    checkFunRef = ", checkFun"+index;
+                }
+                String extraFun = "protected fun <T : Element> "+checkFunName+"Type( tag : T, name : String, v: "+typeFun+") : T = setAtt( tag, name, v"+checkFunRef+" ) ";
                 config.getExtraFun().add( extraFun );
                 builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = "+checkFunName+"Type( this, \""+a.getRawName()+"\", value )\n" );
             } else {
@@ -177,6 +186,9 @@ public class GenerateKotlinFacade {
         config.getAutodocModel().getElements().forEach( e ->  handleElement( config, e ) );
         SafeFunction.apply( () -> {
             try (InputStream is = ClassHelper.loadFromDefaultClassLoader( "generate-kotlin/helper-dsl.txt" )) {
+                for ( int k=0; k<config.getCheckFun().size(); k++ ) {
+                    extraFun.append( "\t\tprivate var checkFun"+k+" : "+config.getCheckFun().get( k )+"\n" );
+                }
                 config.getExtraFun().forEach( f -> extraFun.append( "\t\t"+f+"\n" ) );
                 String helperDslContent = "package "+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+"\n"
                         + StreamIO.readString( is ).replaceAll( "EXTRA-FUN", extraFun.toString() );

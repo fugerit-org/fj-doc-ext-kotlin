@@ -62,32 +62,49 @@ class HelperDSL {
             children.add( element )
         }
 
-		protected fun <T : Element> alignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
-		protected fun <T : Element> borderWidthType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..32 }
-		protected fun <T : Element> idType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..64 }
-		protected fun <T : Element> styleType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "normal", "bold", "underline", "italic", "bolditalic" ).contains( v ) }
-		protected fun <T : Element> fontNameType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..64 }
-		protected fun <T : Element> leadingType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
-		protected fun <T : Element> colorType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
-		protected fun <T : Element> dataType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "string", "number", "date" ).contains( v ) }
-		protected fun <T : Element> formatType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 1..128 }
-		protected fun <T : Element> fontSizeType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..256 }
-		protected fun <T : Element> textIndentType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
-		protected fun <T : Element> spaceType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 0..2048 }
+		private var checkFun0 : (v: String) -> Boolean =  { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
+		private var checkFun1 : (v: Int) -> Boolean =  { v -> v in 0..32 }
+		private var checkFun2 : (v: String) -> Boolean =  { v -> v.length in 1..64 }
+		private var checkFun3 : (v: String) -> Boolean =  { v -> setOf( "normal", "bold", "underline", "italic", "bolditalic" ).contains( v ) }
+		private var checkFun4 : (v: Int) -> Boolean =  { v -> v in 0..2048 }
+		private var checkFun5 : (v: String) -> Boolean =  { v -> v.matches(Regex("#([A-Fa-f0-9]{6})")) }
+		private var checkFun6 : (v: String) -> Boolean =  { v -> setOf( "string", "number", "date" ).contains( v ) }
+		private var checkFun7 : (v: String) -> Boolean =  { v -> v.length in 1..128 }
+		private var checkFun8 : (v: Int) -> Boolean =  { v -> v in 0..256 }
+		private var checkFun9 : (v: Int) -> Boolean =  { v -> v in 1..2048 }
+		private var checkFun10 : (v: Int) -> Boolean =  { v -> v in 1..100 }
+		private var checkFun11 : (v: String) -> Boolean =  { v -> setOf( "normal", "inline" ).contains( v ) }
+		private var checkFun12 : (v: String) -> Boolean =  { v -> setOf( "middle", "top", "bottom" ).contains( v ) }
+		private var checkFun13 : (v: String) -> Boolean =  { v -> setOf( "ul", "uld", "ulm", "ol", "oln", "oll" ).contains( v ) }
+		private var checkFun14 : (v: String) -> Boolean =  { v -> v.length in 0..2048 }
+		private var checkFun15 : (v: String) -> Boolean =  { v -> setOf( "png", "jpg", "gif" ).contains( v ) }
+		private var checkFun16 : (v: Int) -> Boolean =  { v -> v in 1..7 }
+		protected fun <T : Element> alignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun0 ) 
+		protected fun <T : Element> borderWidthType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun1 ) 
+		protected fun <T : Element> idType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun2 ) 
+		protected fun <T : Element> styleType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun3 ) 
+		protected fun <T : Element> fontNameType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun2 ) 
+		protected fun <T : Element> leadingType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun4 ) 
+		protected fun <T : Element> colorType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun5 ) 
+		protected fun <T : Element> dataType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun6 ) 
+		protected fun <T : Element> formatType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun7 ) 
+		protected fun <T : Element> fontSizeType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun8 ) 
+		protected fun <T : Element> textIndentType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun4 ) 
+		protected fun <T : Element> spaceType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun4 ) 
 		protected fun <T : Element> whiteSpaceCollapsType( tag : T, name : String, v: Boolean) : T = setAtt( tag, name, v ) 
-		protected fun <T : Element> columnsType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..2048 }
-		protected fun <T : Element> percentageType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..100 }
-		protected fun <T : Element> tableRenderModeType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "normal", "inline" ).contains( v ) }
+		protected fun <T : Element> columnsType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun9 ) 
+		protected fun <T : Element> percentageType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun10 ) 
+		protected fun <T : Element> tableRenderModeType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun11 ) 
 		protected fun <T : Element> spanType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
-		protected fun <T : Element> valignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "middle", "top", "bottom" ).contains( v ) }
-		protected fun <T : Element> listType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "ul", "uld", "ulm", "ol", "oln", "oll" ).contains( v ) }
-		protected fun <T : Element> urlType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 0..2048 }
-		protected fun <T : Element> imageType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> setOf( "png", "jpg", "gif" ).contains( v ) }
+		protected fun <T : Element> valignType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun12 ) 
+		protected fun <T : Element> listType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun13 ) 
+		protected fun <T : Element> urlType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun14 ) 
+		protected fun <T : Element> imageType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun15 ) 
 		protected fun <T : Element> scalingType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
 		protected fun <T : Element> base64Type( tag : T, name : String, v: String) : T = setAtt( tag, name, v ) 
-		protected fun <T : Element> altType( tag : T, name : String, v: String) : T = setAtt( tag, name, v )  { v -> v.length in 0..2048 }
+		protected fun <T : Element> altType( tag : T, name : String, v: String) : T = setAtt( tag, name, v, checkFun14 ) 
 		protected fun <T : Element> lengthType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v ) 
-		protected fun <T : Element> headLevelType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v )  { v -> v in 1..7 }
+		protected fun <T : Element> headLevelType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun16 ) 
 
 
         override fun toString(): String {
