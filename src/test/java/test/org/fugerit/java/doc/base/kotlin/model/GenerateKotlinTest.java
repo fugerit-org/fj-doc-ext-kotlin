@@ -3,6 +3,8 @@ package test.org.fugerit.java.doc.base.kotlin.model;
 import org.fugerit.java.core.cfg.ConfigException;
 import org.fugerit.java.core.function.SafeFunction;
 import org.fugerit.java.core.util.PropsIO;
+import org.fugerit.java.doc.base.kotlin.gen.GenerateKotlinConfig;
+import org.fugerit.java.doc.base.kotlin.gen.GenerateKotlinFacade;
 import org.fugerit.java.doc.lib.autodoc.facade.XsdParserFacade;
 import org.fugerit.java.doc.lib.autodoc.parser.model.AutodocModel;
 import org.junit.jupiter.api.Test;

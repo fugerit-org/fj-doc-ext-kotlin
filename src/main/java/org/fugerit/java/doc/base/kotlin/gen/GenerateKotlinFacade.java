@@ -1,4 +1,4 @@
-package test.org.fugerit.java.doc.base.kotlin.model;
+package org.fugerit.java.doc.base.kotlin.gen;
 
 import lombok.extern.slf4j.Slf4j;
 import org.fugerit.java.core.function.SafeFunction;

@@ -1,4 +1,4 @@
-package test.org.fugerit.java.doc.base.kotlin.model;
+package org.fugerit.java.doc.base.kotlin.gen;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -7,7 +7,6 @@ import org.fugerit.java.doc.lib.autodoc.parser.model.AutodocModel;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class GenerateKotlinConfig {

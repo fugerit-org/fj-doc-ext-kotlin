@@ -115,6 +115,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.fugerit.java</groupId>
+			<artifactId>fj-doc-lib-autodoc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
 			<version>${kotlin.version}</version>
@@ -129,12 +135,6 @@
 		<dependency>
 			<groupId>org.fugerit.java</groupId>
 			<artifactId>fj-doc-freemarker</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.fugerit.java</groupId>
-			<artifactId>fj-doc-lib-autodoc</artifactId>
 			<scope>test</scope>
 		</dependency>
 
