@@ -1,7 +1,7 @@
 import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 
 dslDoc {
-    meta {
+    metadata {
         info( ( "DSL Kotlin Document From JUnit 2 with coverage" ) ).name( "doc-title" )
         headerExt {
             h( "title 2" )

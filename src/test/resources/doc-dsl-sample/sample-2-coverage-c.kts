@@ -3,6 +3,22 @@ import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 dslDoc {
     meta {
         info( ( "DSL Kotlin Document From JUnit 2" ) ).name( "doc-title" )
+        header {
+            align( "center" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+            h( "head 1" ).headLevel( 3 )
+            image().align( "center" ).alt( "avatar" ).url( "https://avatars.githubusercontent.com/u/37816284?s=96&v=4" )
+        }
+        footer() {
+            align( "right" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+            h( "head 1" ).headLevel( 3 )
+            image().align( "center" ).alt( "avatar" ).url( "https://avatars.githubusercontent.com/u/37816284?s=96&v=4" )
+        }
     }
     body {
         para( "Concise paragraph" )

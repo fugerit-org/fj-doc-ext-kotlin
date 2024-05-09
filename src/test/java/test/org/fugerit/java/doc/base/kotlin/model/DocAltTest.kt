@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.StringReader
+import java.util.*
 import javax.script.ScriptEngineManager
 
 class DocAltTest : TestCase() {
@@ -44,10 +45,16 @@ class DocAltTest : TestCase() {
         return parsedDsl;
     }
 
-    fun testScriptCoverage() =
-        Assertions.assertEquals( "http://javacoredoc.fugerit.org",
-            testScriptWorker( "src/test/resources/doc-dsl-sample/sample-2-coverage.kts" ).attributes["xmlns"]
+    fun testScriptCoverage() = arrayListOf<String>(
+        "src/test/resources/doc-dsl-sample/sample-2-coverage-a.kts",
+        "src/test/resources/doc-dsl-sample/sample-2-coverage-b.kts",
+        "src/test/resources/doc-dsl-sample/sample-2-coverage.kts"
+    ).forEach {
+        Assertions.assertEquals(
+            "http://javacoredoc.fugerit.org",
+            testScriptWorker("$it", false).attributes["xmlns"]
         )
+    }
 
     fun testScript() =
         Assertions.assertEquals( "http://javacoredoc.fugerit.org",

@@ -1,8 +1,24 @@
 import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 
 dslDoc {
-    meta {
+    metadata {
         info( ( "DSL Kotlin Document From JUnit 2" ) ).name( "doc-title" )
+        header {
+            align( "center" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+            phrase( "test" )
+            para( "test" )
+        }
+        footer() {
+            align( "right" )
+            borderWidth( 1 )
+            numbered( true )
+            expectedSize( 200 )
+            phrase( "test" )
+            para( "test" )
+        }
     }
     body {
         para( "Concise paragraph" )
