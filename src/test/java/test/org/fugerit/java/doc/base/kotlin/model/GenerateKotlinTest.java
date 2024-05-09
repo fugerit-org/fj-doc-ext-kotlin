@@ -7,6 +7,7 @@ import org.fugerit.java.doc.base.kotlin.gen.GenerateKotlinConfig;
 import org.fugerit.java.doc.base.kotlin.gen.GenerateKotlinFacade;
 import org.fugerit.java.doc.lib.autodoc.facade.XsdParserFacade;
 import org.fugerit.java.doc.lib.autodoc.parser.model.AutodocModel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class GenerateKotlinTest {
@@ -29,6 +30,7 @@ class GenerateKotlinTest {
                     PropsIO.loadFromClassLoader( "generate-kotlin/config.properties" ),
                     parseLast());
             GenerateKotlinFacade.generate( config );
+            Assertions.assertNotNull( config );
         } );
     }
 

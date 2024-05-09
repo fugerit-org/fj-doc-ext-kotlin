@@ -20,6 +20,12 @@ import java.util.List;
 @Slf4j
 public class GenerateKotlinFacade {
 
+    private static final String PACKAGE = "package ";
+
+    private static final String ENDLINE = "\n";
+
+    private static final String FUN = "   fun ";
+
     private GenerateKotlinFacade() {}
 
     private static void handleRoot(GenerateKotlinConfig config, AutodocElement element ) throws IOException {
@@ -28,21 +34,16 @@ public class GenerateKotlinFacade {
         String fileNameImport = config.getProperty( GenerateKotlinConfig.CONFIG_MAIN_FUN )+"Kt";
         String rootName = config.toKotlinClass( element.getName() );
         String content = "@file:JvmName(\""+fileNameImport+"\")\n" +
-                "\n" +
-                "package "+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+"\n" +
-                "\n" +
+                ENDLINE +
+                PACKAGE+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+ENDLINE +
+                ENDLINE +
                 "fun "+ config.getProperty( GenerateKotlinConfig.CONFIG_MAIN_FUN )+"(block: "+rootName+".() -> Unit): "+rootName+" =\n" +
                 "    "+rootName+"().apply(block)";
         File dslFile = new File( config.getPackageFolder(), fileName );
         FileIO.writeString( content, dslFile );
     }
 
-    private static String createCheck( GenerateKotlinConfig config, String typeFun, XsdSimpleType simpleType ) {
-        String checkFun = "";
-        SimpleValue<Integer> min = new SimpleValue<>(-1);
-        SimpleValue<Integer> max = new SimpleValue<>(-1);
-        List<String> valueEnum = new ArrayList<>();
-        SimpleValue<String> regex = new SimpleValue( null );
+    private static void checkRestrictions1( XsdSimpleType simpleType, SimpleValue<Integer> min, SimpleValue<Integer> max ) {
         simpleType.getAllRestrictions().forEach( r -> {
             if ( r.getMinLength() != null ) min.setValue( r.getMinLength().getValue() );
             if ( r.getMaxLength() != null ) max.setValue( r.getMaxLength().getValue() );
@@ -50,9 +51,24 @@ public class GenerateKotlinFacade {
             if ( r.getMinInclusive() != null ) min.setValue( Integer.valueOf( r.getMinInclusive().getValue() ) );
             if ( r.getMaxExclusive() != null ) max.setValue( Integer.valueOf( r.getMaxExclusive().getValue() )-1 );
             if ( r.getMaxInclusive() != null ) max.setValue( Integer.valueOf( r.getMaxInclusive().getValue() ) );
-            if ( r.getEnumeration() != null ) r.getEnumeration().forEach( e -> valueEnum.add( "\""+e.getValue().toString()+"\"" ) );
+        } );
+    }
+
+    private static void checkRestrictions2( XsdSimpleType simpleType, List<String> valueEnum, SimpleValue<String> regex ) {
+        simpleType.getAllRestrictions().forEach( r -> {
+            if ( r.getEnumeration() != null ) r.getEnumeration().forEach( e -> valueEnum.add( "\""+e.getValue()+"\"" ) );
             if ( r.getPattern() != null && r.getPattern().getValue() != null ) regex.setValue( r.getPattern().getValue() );
         } );
+    }
+
+    private static String createCheck( String typeFun, XsdSimpleType simpleType ) {
+        String checkFun = "";
+        SimpleValue<Integer> min = new SimpleValue<>(-1);
+        SimpleValue<Integer> max = new SimpleValue<>(-1);
+        List<String> valueEnum = new ArrayList<>();
+        SimpleValue<String> regex = new SimpleValue<>( null );
+        checkRestrictions1( simpleType, min, max );
+        checkRestrictions2( simpleType, valueEnum, regex );
         if ( regex.getValue() != null ) {
             checkFun = " { v -> v.matches(Regex(\""+regex.getValue()+"\")) }";
         } else if ( min.getValue() != -1 && max.getValue() != -1 ) {
@@ -67,32 +83,34 @@ public class GenerateKotlinFacade {
         return checkFun;
     }
 
-    private static void recurseElements(GenerateKotlinConfig config, AutodocElement element, final StringBuilder builder, Collection<XsdElement> elements ) {
+    private static void recurseElements(GenerateKotlinConfig config, final StringBuilder builder, Collection<XsdElement> elements ) {
         elements.forEach( e -> {
             boolean isTextElementSub = isTextElement( e.getXsdComplexType() );
             String kotlinClass = config.toKotlinClass( e.getRawName() );
             String kotlinFun = config.toKotlinFun( e.getRawName() );
             String textConstructor = isTextElementSub ? " text: String = \"\"," : "";
-            builder.append( "   fun "+kotlinFun+"("+textConstructor+" init: "+kotlinClass+".() -> Unit = {} ): "+kotlinClass+" {\n" );
+            builder.append( FUN+kotlinFun+"("+textConstructor+" init: "+kotlinClass+".() -> Unit = {} ): "+kotlinClass+" {\n" );
             builder.append( "       return initTag("+kotlinClass+"(" +(isTextElementSub ? "text" : "")+ "), init);\n" );
             builder.append( "   }\n" );
         } );
     }
 
-    private static void recurseElements(GenerateKotlinConfig config, AutodocElement element, final StringBuilder builder, AutodocSequence sequence) {
-        if ( sequence != null ) {
-            if ( sequence.getXsdElements() != null ) recurseElements( config, element, builder, sequence.getXsdElements() );
-            if ( sequence.getAutodocSequence() != null ) sequence.getAutodocSequence().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
-            if ( sequence.getAutodocSequence() != null ) sequence.getAutodocChoices().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
+    private static <T extends XsdMultipleElements> void recurseElements(GenerateKotlinConfig config, final StringBuilder builder, AutodocMulti<T> holder) {
+        if ( holder != null ) {
+            if ( holder.getXsdElements() != null ) recurseElements( config, builder, holder.getXsdElements() );
+            if ( holder.getAutodocSequence() != null ) holder.getAutodocSequence().forEach( c -> recurseElements( config, builder, c.getXsdElements() ) );
+            if ( holder.getAutodocChoices() != null ) holder.getAutodocChoices().forEach( c -> recurseElements( config, builder, c.getXsdElements() ) );
         }
-      }
+    }
 
-    private static void recurseElements(GenerateKotlinConfig config, AutodocElement element, final StringBuilder builder, AutodocChoice choice) {
-        if ( choice != null ) {
-            if ( choice.getXsdElements() != null ) recurseElements( config, element, builder, choice.getXsdElements() );
-            if ( choice.getAutodocSequence() != null ) choice.getAutodocSequence().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
-            if ( choice.getAutodocSequence() != null ) choice.getAutodocChoices().forEach( c -> recurseElements( config, element, builder, c.getXsdElements() ) );
+    private static String findTypeFun( String baseName ) {
+        String typeFun = "String";
+        if ( baseName.contains( "int" ) || baseName.contains( "decimal" ) ) {
+            typeFun = "Int";
+        } else if ( baseName.contains( "boolean" ) ) {
+            typeFun = "Boolean";
         }
+        return typeFun;
     }
 
     private static String handleElementFun( GenerateKotlinConfig config, AutodocElement element, boolean isTextElement ) {
@@ -102,32 +120,19 @@ public class GenerateKotlinFacade {
             builder.append( "\n   fun setText( value: String ) { addKid( HelperDSL.TextElement( value ) ) }\n\n" );
         }
         // functions for elements
-        recurseElements( config, element, builder, element.getAutodocType().getSequence() );
-        recurseElements( config, element, builder, element.getAutodocType().getChoice() );
-        builder.append( "\n" );
+        recurseElements( config, builder, element.getAutodocType().getSequence() );
+        recurseElements( config, builder, element.getAutodocType().getChoice() );
+        builder.append( ENDLINE );
         // functions for attributes
         String kotlinClassElement = config.toKotlinClass( element.getName() );
         element.getXsdAttributes().forEach( a -> {
             String xmlType = a.getType();
             String checkFunName = config.toCheckTypeFun( xmlType );
             String kotlinkFun = config.toKotlinFun( a.getRawName() );
-            String typeFun = "String";
-            String checkFun = "";
-            String baseName = a.getType();
-            if ( a.getXsdSimpleType() != null ) {
-                baseName = AutodocUtils.getBaseName( a.getXsdSimpleType().getAllRestrictions(), config.getAutodocModel() );
-            }
+            String baseName = a.getXsdSimpleType() != null ? AutodocUtils.getBaseName( a.getXsdSimpleType().getAllRestrictions(), config.getAutodocModel() ) : a.getType() ;
+            String typeFun = findTypeFun( baseName );
             log.info( "type name : {}, basename : {}", a.getRawName(), baseName );
-            // type
-            if ( baseName.contains( "int" ) || baseName.contains( "decimal" ) ) {
-                typeFun = "Int";
-            } else if ( baseName.contains( "boolean" ) ) {
-                typeFun = "Boolean";
-            }
-            if ( a.getXsdSimpleType() != null ) {
-                // check
-                checkFun = createCheck( config, typeFun, a.getXsdSimpleType() );
-            }
+            String checkFun = a.getXsdSimpleType() != null ? createCheck( typeFun, a.getXsdSimpleType() ) : "";
             log.info( "element : {}, attribute : {}, type : {} : xml type : {}, checkFunName : {}", element.getName(), a.getRawName(), typeFun, xmlType, checkFunName );
             if ( xmlType.contains( config.getAutodocModel().getAutodocPrefix() ) )  {
                 String checkFunRef = "";
@@ -141,9 +146,9 @@ public class GenerateKotlinFacade {
                 }
                 String extraFun = "protected fun <T : Element> "+checkFunName+"Type( tag : T, name : String, v: "+typeFun+") : T = setAtt( tag, name, v"+checkFunRef+" ) ";
                 config.getExtraFun().add( extraFun );
-                builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = "+checkFunName+"Type( this, \""+a.getRawName()+"\", value )\n" );
+                builder.append( FUN+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = "+checkFunName+"Type( this, \""+a.getRawName()+"\", value )\n" );
             } else {
-                builder.append( "   fun "+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = setAtt( this, \""+a.getRawName()+"\", value )"+checkFun+"\n" );
+                builder.append( FUN+kotlinkFun+"( value: "+typeFun+" ): "+kotlinClassElement+" = setAtt( this, \""+a.getRawName()+"\", value )"+checkFun+ENDLINE );
             }
         } );
         return builder.toString();
@@ -166,11 +171,11 @@ public class GenerateKotlinFacade {
                 handleRoot( config, element );
                 textInit = config.getProperty( GenerateKotlinConfig.CONFIG_ROOT_INIT, textInit );
             }
-            String content = "package "+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+"\n" +
-                    "\n" +
+            String content = PACKAGE+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+ENDLINE +
+                    ENDLINE +
                     "class "+kotlinClass+textConstructor+" : HelperDSL.TagWithText( \""+element.getName()+"\" ) {\n" +
                     textInit +
-                    handleElementFun( config, element, isTextElement ) + "\n" +
+                    handleElementFun( config, element, isTextElement ) + ENDLINE +
                     "}\n";
             String fileName = kotlinClass+".kt";
             File tagFile = new File( config.getPackageFolder(), fileName );
@@ -187,11 +192,11 @@ public class GenerateKotlinFacade {
         SafeFunction.apply( () -> {
             try (InputStream is = ClassHelper.loadFromDefaultClassLoader( "generate-kotlin/helper-dsl.txt" )) {
                 for ( int k=0; k<config.getCheckFun().size(); k++ ) {
-                    extraFun.append( "\t\tprivate var checkFun"+k+" : "+config.getCheckFun().get( k )+"\n" );
+                    extraFun.append( "\t\tprivate var checkFun"+k+" : "+config.getCheckFun().get( k )+ENDLINE );
                 }
-                config.getExtraFun().forEach( f -> extraFun.append( "\t\t"+f+"\n" ) );
-                String helperDslContent = "package "+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+"\n"
-                        + StreamIO.readString( is ).replaceAll( "EXTRA-FUN", extraFun.toString() );
+                config.getExtraFun().forEach( f -> extraFun.append( "\t\t"+f+ENDLINE ) );
+                String helperDslContent = PACKAGE+config.getProperty( GenerateKotlinConfig.CONFIG_PACKAGE )+ENDLINE
+                        + StreamIO.readString( is ).replace( "EXTRA-FUN", extraFun.toString() );
                 File helperFile = new File( config.getPackageFolder(), "HelperDSL.kt" );
                 FileIO.writeString( helperDslContent, helperFile );
             }
