@@ -85,5 +85,9 @@ dslDoc {
             li { h("h 4").headLevel( 3 ) }
         }.id("list1").listType("ul")
         nbsp().length( 2 )
+        para( "coverage" ) {
+            para( "inner" )
+            phrase {  "test"  }
+        }.id( "paraid1" ).fontName( "Arial" ).type( "string" ).spaceRight( 1 ).spaceBefore( 2 ).textIndent( 1 ).size( 10 )
     }
 }

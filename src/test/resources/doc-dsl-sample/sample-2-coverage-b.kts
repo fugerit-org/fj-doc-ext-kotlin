@@ -1,7 +1,7 @@
 import org.fugerit.java.doc.base.kotlin.dsl.dslDoc
 
 dslDoc {
-    metadata {
+    meta {
         info( ( "DSL Kotlin Document From JUnit 2" ) ).name( "doc-title" )
         header {
             align( "center" )
