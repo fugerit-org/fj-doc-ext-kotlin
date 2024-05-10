@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.StringReader
 import java.util.*
+import javax.script.ScriptContext
 import javax.script.ScriptEngineManager
 
 class DocAltTest : TestCase() {
@@ -32,9 +33,18 @@ class DocAltTest : TestCase() {
     private val longString = createString()
 
     private fun testScriptWorker( path : String, render : Boolean = true ) : Doc {
+        return testScriptWorkerBind( path, render, null );
+    }
+
+    private fun <T> testScriptWorkerBind( path : String, render : Boolean = true, bind : T ) : Doc {
         log.info( "path : {}, render : {}", path, render)
         val fileContent = File(path ).readText()
         val scriptEngine = ScriptEngineManager().getEngineByExtension("kts")
+        if ( bind != null ) {
+            val bindings = scriptEngine.createBindings();
+            bindings.put( "data", bind );
+            scriptEngine.setBindings( bindings, ScriptContext.ENGINE_SCOPE );
+        }
         val parsedDsl = scriptEngine.eval(fileContent)
         if (parsedDsl !is org.fugerit.java.doc.base.kotlin.dsl.Doc) {
             throw ConfigRuntimeException("Script does not return a Doc")
@@ -59,6 +69,13 @@ class DocAltTest : TestCase() {
     fun testScript() =
         Assertions.assertEquals( "http://javacoredoc.fugerit.org",
             testScriptWorker( "src/test/resources/doc-dsl-sample/sample-2.kts" ).attributes["xmlns"]
+        )
+
+    val params = arrayListOf<String>( "1", "2", "3", "4", "5", "6", "7", "8", "9" );
+
+    fun testScriptParams() =
+        Assertions.assertEquals( "http://javacoredoc.fugerit.org",
+            testScriptWorkerBind( "src/test/resources/doc-dsl-sample/sample-2-params.kts", true, params ).attributes["xmlns"]
         )
 
     private fun renderHtml( doc: Doc ) {
