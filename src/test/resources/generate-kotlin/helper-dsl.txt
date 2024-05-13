@@ -61,6 +61,12 @@ class HelperDSL {
             children.add( element )
         }
 
+        fun attList(data: Map<*, *>, key: String): kotlin.collections.List<*> = data[key] as kotlin.collections.List<*>
+
+        fun attMap(data: Map<*, *>, key: String): kotlin.collections.Map<*, *> = data[key] as kotlin.collections.Map<*, *>
+
+        fun attStr(data: Map<*, *>, key: String): String = data[key].toString()
+
 EXTRA-FUN
 
         override fun toString(): String {

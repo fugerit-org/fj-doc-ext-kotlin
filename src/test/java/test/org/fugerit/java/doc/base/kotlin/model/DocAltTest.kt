@@ -71,7 +71,10 @@ class DocAltTest : TestCase() {
             testScriptWorker( "src/test/resources/doc-dsl-sample/sample-2.kts" ).attributes["xmlns"]
         )
 
-    val params = arrayListOf<String>( "1", "2", "3", "4", "5", "6", "7", "8", "9" );
+    val params = mapOf(
+        "listSample" to arrayListOf<String>( "1", "2", "3", "4", "5", "6", "7", "8", "9" ),
+        "testKey" to "testValue",
+        "testMap" to mapOf( "nestedKey" to "nestedValue" ) )
 
     fun testScriptParams() =
         Assertions.assertEquals( "http://javacoredoc.fugerit.org",

@@ -62,6 +62,12 @@ class HelperDSL {
             children.add( element )
         }
 
+        fun attList(data: Map<*, *>, key: String): kotlin.collections.List<*> = data[key] as kotlin.collections.List<*>
+
+        fun attMap(data: Map<*, *>, key: String): kotlin.collections.Map<*, *> = data[key] as kotlin.collections.Map<*, *>
+
+        fun attStr(data: Map<*, *>, key: String): String = data[key].toString()
+
 		private var checkFun0 : (v: String) -> Boolean =  { v -> setOf( "center", "right", "left", "justify", "justifyall" ).contains( v ) }
 		private var checkFun1 : (v: Int) -> Boolean =  { v -> v in 0..32 }
 		private var checkFun2 : (v: String) -> Boolean =  { v -> v.length in 1..64 }

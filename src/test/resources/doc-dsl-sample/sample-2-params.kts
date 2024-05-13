@@ -33,7 +33,9 @@ dslDoc {
             }
         }.width( 100 ).columns( 2 ).colwidths( "50;50" )
         list {
-            data.forEach( { e -> li().para( "item $e" ) } )
+            attList( data, "listSample" ).forEach( { e -> li().para( "item $e" ) } )
         }
+        para( attStr( data, "testKey" ) )
+        para( attStr( attMap( data, "testMap"), "nestedKey" ) )
     }
 }
