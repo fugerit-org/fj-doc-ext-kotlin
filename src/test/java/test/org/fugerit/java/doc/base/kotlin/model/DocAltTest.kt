@@ -72,9 +72,11 @@ class DocAltTest : TestCase() {
         )
 
     val params = mapOf(
-        "listSample" to arrayListOf<String>( "1", "2", "3", "4", "5", "6", "7", "8", "9" ),
-        "testKey" to "testValue",
-        "testMap" to mapOf( "nestedKey" to "nestedValue" ) )
+        "docTitle" to "My Kotlin Template Sample Doc Title",
+        "listPeople" to arrayListOf( mapOf( "name" to "Luthien", "surname" to "Tinuviel", "title" to "Queen" ),
+           mapOf( "name" to "Thorin", "surname" to "Oakshield", "title" to "King" ) ),
+        "testMap" to mapOf( "nestedKey" to "nestedValue" )
+    )
 
     fun testScriptParams() =
         Assertions.assertEquals( "http://javacoredoc.fugerit.org",

@@ -63,6 +63,8 @@ class HelperDSL {
 
         fun attList(data: Map<*, *>, key: String): kotlin.collections.List<*> = data[key] as kotlin.collections.List<*>
 
+        fun attListMap(data: Map<*, *>, key: String): kotlin.collections.List<Map<*, *>> = data[key] as kotlin.collections.List<Map<*, *>>
+
         fun attMap(data: Map<*, *>, key: String): kotlin.collections.Map<*, *> = data[key] as kotlin.collections.Map<*, *>
 
         fun attStr(data: Map<*, *>, key: String): String = data[key].toString()

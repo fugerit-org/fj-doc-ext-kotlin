@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Parameter handling function : attListMap
+
 ## [0.3.0] - 2024-05-13
 
 ### Added

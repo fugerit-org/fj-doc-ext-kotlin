@@ -32,10 +32,18 @@ dslDoc {
                 cell { para( "data 2" )  }
             }
         }.width( 100 ).columns( 2 ).colwidths( "50;50" )
-        list {
-            attList( data, "listSample" ).forEach( { e -> li().para( "item $e" ) } )
-        }
-        para( attStr( data, "testKey" ) )
-        para( attStr( attMap( data, "testMap"), "nestedKey" ) )
+        para( attStr( attMap( data, "testMap" ), "nestedKey" ) )
+        table {
+            row {
+                cell { para( "Name" ) }.align( "center" )
+                cell { para( "Surname" ) }.align( "center" )
+                cell { para( "Title" ) }.align( "center" )
+            }.header( true )
+            attListMap( data, "listPeople" ).forEach( { e -> row {
+                cell { para( attStr( e, "name" ) ) }
+                cell { para( attStr( e, "surname" ) ) }
+                cell { para( attStr( e, "title" ) ) }
+            } } )
+        }.columns( 3 ).colwidths( "30;30;40" ).width( 100 ).id( "data-table" ).padding( 2 )
     }
 }
