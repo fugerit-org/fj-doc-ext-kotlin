@@ -64,7 +64,7 @@ class HelperDSL {
 
         fun attList(data: Map<*, *>, key: String): kotlin.collections.List<*> = data[key] as kotlin.collections.List<*>
 
-        fun attListMap(data: Map<*, *>, key: String): kotlin.collections.List<Map<*, *>> = data[key] as kotlin.collections.List<Map<*, *>>
+        fun attListMap(data: Map<*, *>, key: String): kotlin.collections.List<Map<*, *>> = if ( data[key] is kotlin.collections.List<*> ) data[key] as kotlin.collections.List<Map<*, *>> else throw ConfigRuntimeException("test")
 
         fun attMap(data: Map<*, *>, key: String): kotlin.collections.Map<*, *> = data[key] as kotlin.collections.Map<*, *>
 
