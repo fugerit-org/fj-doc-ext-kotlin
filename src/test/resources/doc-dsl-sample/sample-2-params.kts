@@ -29,7 +29,7 @@ dslDoc {
             }.header( true )
             row {
                 cell { para( "data 1" )  }
-                cell { para( "data 2" )  }
+                cell { para { + "data 2 unary" } }
             }
         }.width( 100 ).columns( 2 ).colwidths( "50;50" )
         para( attStr( attMap( data, "testMap" ), "nestedKey" ) )
@@ -44,6 +44,14 @@ dslDoc {
                 cell { para( attStr( e, "surname" ) ) }
                 cell { para( attStr( e, "title" ) ) }
             } } )
+            attList( data, "listPeople" ).forEach( { e -> row {
+                cell { para( "$e.name" ) }
+                cell { para( "$e.surname" ) }
+                cell { para( "$e.title" ) }
+            } } )
         }.columns( 3 ).colwidths( "30;30;40" ).width( 100 ).id( "data-table" ).padding( 2 )
+        list {
+            attList( data, "testList" ).forEach { e -> li { para( "$e" )} }
+        }
     }
 }

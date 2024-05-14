@@ -52,7 +52,7 @@ dslDoc {
             .leading( 3 ).link( "#a" ).anchor( "a" ).whiteSpaceCollapse( true )
         table {
             row {
-                cell { para( "col 1" )  }
+                cell { para( "col 1" )  }.type( "string" )
                 cell { para( "col 2" )  }
                 cell { para( "col 3" )  }
             }.header( true ).id( "headerRow" )
@@ -63,7 +63,7 @@ dslDoc {
             row {
                 cell { nbsp { length( 1 ) } }.valign( "middle" ).backColor( "#000000" ).foreColor( "#ffffff" )
                 cell { phrase( "test" ) }.borderColorTop( "#000000" ).borderColorLeft( "#000000" ).borderColorRight( "#000000" ).borderColorBottom( "#000000" )
-                cell { br {} }.borderWidth( 1 )
+                cell { br {} }.borderWidth( 1 ).borderColor( "#ffffff" ).borderWidthBottom( 1 ).borderWidthLeft( 1 ).borderWidthRight( 1 ).borderWidthTop( 1 )
             }
             row {
                 cell { barcode().text( "test"  ) }.header( true ).id( "cellid1" )
@@ -73,6 +73,12 @@ dslDoc {
                 }
                 cell { table { row { cell { para("cell 1") }  } }.columns( 1 ).colwidths( "100" ).width( 100 ) }
             }
+            row {
+                cell {
+                    table { row { cell { para("cell 2") } } }.columns( 1 ).width( 100 ).colwidths( "100" )
+                }.colspan( 3 )
+            }
+
         }.id( "table-1" ).width( 100 ).columns( 3 ).colwidths( "50;50;50" ).backColor( "#ffddee" ).foreColor( "#556677" )
             .spacing( 1 ).padding( 2 ).spaceAfter( 5 ).spaceAfter( 5 ).renderMode( "normal" ).caption( "test caption" )
         barcode().size( 100 ).type( "EAN" )

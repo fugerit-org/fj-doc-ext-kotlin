@@ -1,5 +1,8 @@
 package org.fugerit.java.doc.base.kotlin.dsl
+
 import org.fugerit.java.core.cfg.ConfigRuntimeException
+import org.fugerit.java.core.log.LogFacade
+import org.fugerit.java.core.util.checkpoint.CheckpointUtils
 import org.fugerit.java.core.xml.dom.DOMIO
 import java.io.StringWriter
 
@@ -64,7 +67,8 @@ class HelperDSL {
 
         fun attList(data: Map<*, *>, key: String): kotlin.collections.List<*> = data[key] as kotlin.collections.List<*>
 
-        fun attListMap(data: Map<*, *>, key: String): kotlin.collections.List<Map<*, *>> = if ( data[key] is kotlin.collections.List<*> ) data[key] as kotlin.collections.List<Map<*, *>> else throw ConfigRuntimeException("test")
+        @Suppress("UNCHECKED_CAST")
+        fun attListMap(data: Map<*, *>, key: String): kotlin.collections.List<Map<*, *>> = attList( data, key ) as kotlin.collections.List<Map<*, *>>
 
         fun attMap(data: Map<*, *>, key: String): kotlin.collections.Map<*, *> = data[key] as kotlin.collections.Map<*, *>
 
@@ -115,14 +119,18 @@ class HelperDSL {
 		protected fun <T : Element> headLevelType( tag : T, name : String, v: Int) : T = setAtt( tag, name, v, checkFun16 ) 
 
 
-        override fun toString(): String {
+        fun toXml(): String {
+            val startTime = System.currentTimeMillis();
             val xmlDocument = DOMIO.newSafeDocumentBuilderFactory().newDocumentBuilder().newDocument();
             val xmlRoot = xmlDocument.createElement(name)
             helper(xmlRoot, xmlDocument)
             val writer = StringWriter()
             DOMIO.writeDOMIndent( xmlRoot, writer )
+            LogFacade.getLog().debug( "toXml time : {}", CheckpointUtils.formatTimeDiffMillis( startTime, System.currentTimeMillis() ) )
             return writer.toString()
         }
+
+        override fun toString(): String = toXml()
 
     }
 
