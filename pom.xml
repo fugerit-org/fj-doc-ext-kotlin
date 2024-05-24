@@ -23,7 +23,7 @@
 	</licenses>
 	
 	<properties>
-		<kotlin.version>1.9.23</kotlin.version>
+		<kotlin.version>2.0.0</kotlin.version>
 		<fj-doc-version>${project.parent.version}</fj-doc-version>
 	</properties>
 
