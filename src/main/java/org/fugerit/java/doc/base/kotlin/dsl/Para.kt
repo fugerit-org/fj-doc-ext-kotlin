@@ -13,7 +13,7 @@ class Para( text: String = "" ) : HelperDSL.TagWithText( "para" ) {
        return initTag(Para(text), init);
    }
    fun h( text: String = "", init: H.() -> Unit = {} ): H {
-      return initTag(H(text), init);
+       return initTag(H(text), init);
    }
 
    fun id( value: String ): Para = idType( this, "id", value )

@@ -43,6 +43,9 @@ dslDoc {
             .leading( 1 )
             .format( "{}" )
         para {
+            para( "test 1 para" )
+            phrase( "test 1 phrase" )
+            h( "head level 4 a" ).headLevel( 4 )
             setText("Verbose paragraph")
             align( "left" )
             style( "italic" )
@@ -50,7 +53,13 @@ dslDoc {
             spaceAfter( 10 )
             foreColor( "#000000" )
             backColor( "#ffffff" )
-
+        }
+        h {
+            setText("head level 3")
+            headLevel( 3 )
+            para( "test 2 para" )
+            phrase( "test 2 phrase" )
+            h( "head level 4 b" ).headLevel( 4 )
         }
         phrase( "Inline phrase" ).id( "ele 3" ).style( "normal" ).size( 8 ).fontName( "Arial" )
             .leading( 3 ).link( "#a" ).anchor( "a" ).whiteSpaceCollapse( true )
