@@ -6,6 +6,15 @@ class H( text: String = "" ) : HelperDSL.TagWithText( "h" ) {
 
    fun setText( value: String ) { addKid( HelperDSL.TextElement( value ) ) }
 
+   fun phrase( text: String = "", init: Phrase.() -> Unit = {} ): Phrase {
+      return initTag(Phrase(text), init);
+   }
+   fun para( text: String = "", init: Para.() -> Unit = {} ): Para {
+      return initTag(Para(text), init);
+   }
+   fun h( text: String = "", init: H.() -> Unit = {} ): H {
+      return initTag(H(text), init);
+   }
 
    fun id( value: String ): H = idType( this, "id", value )
    fun style( value: String ): H = styleType( this, "style", value )

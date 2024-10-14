@@ -12,6 +12,9 @@ class Para( text: String = "" ) : HelperDSL.TagWithText( "para" ) {
    fun para( text: String = "", init: Para.() -> Unit = {} ): Para {
        return initTag(Para(text), init);
    }
+   fun h( text: String = "", init: H.() -> Unit = {} ): H {
+      return initTag(H(text), init);
+   }
 
    fun id( value: String ): Para = idType( this, "id", value )
    fun style( value: String ): Para = styleType( this, "style", value )
